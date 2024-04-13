@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import "./globals.css"
 import { montserrat } from "@/styles/font"
 import { ReactNode } from "react"
+import Header from "@/components/header"
 
 export const metadata: Metadata = {
   title: "Clement Mailliere - Portfolio",
@@ -15,7 +16,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={montserrat.className}>{children}</body>
+      <body className={montserrat.className}>
+        <Header />
+        {children}
+      </body>
     </html>
   )
 }

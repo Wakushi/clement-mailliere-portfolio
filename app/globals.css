@@ -90,6 +90,60 @@ img {
   transform: scale(1.1);
 }
 
+/* HAMBURGER MENU */
+
+.hamburger-icon {
+  cursor: pointer;
+  position: relative;
+  z-index: 4;
+}
+
+@media (width >= 900px) {
+  .hamburger-icon {
+    display: none;
+  }
+}
+
+.hamburger-menu {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: 28px;
+  height: 24px;
+  gap: 11px;
+  pointer-events: none;
+}
+
+.bar {
+  width: 100%;
+  max-width: 25px;
+  height: 3px;
+  background-color: #ffffff;
+  transition: transform 0.2s ease-in-out;
+}
+
+.bar.middle {
+  position: absolute;
+}
+
+.hamburger-menu.open .bar.middle {
+  transform: rotate(45deg);
+}
+
+.hamburger-menu.open .bar.top {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.hamburger-menu.open .bar.bottom {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+.show-modal {
+  transform: translateX(0%);
+  opacity: 1;
+}
+
 .fade-in {
   animation: fade-in 500ms 500ms ease-out forwards;
 }

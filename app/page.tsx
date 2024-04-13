@@ -1,8 +1,9 @@
+import Footer from "@/components/footer"
 import NavLink from "@/components/nav-link"
 
 export default function LandingPage() {
   return (
-    <div className="flex justify-center items-center relative h-[100dvh] overflow-hidden">
+    <div className="flex flex-col justify-center items-center relative h-[100dvh] overflow-hidden">
       <section className="hero">
         <nav>
           <ul className="flex flex-col gap-[1rem] relative z-2 md:flex-row">
@@ -29,6 +30,7 @@ export default function LandingPage() {
           </ul>
         </nav>
       </section>
+      <Footer />
     </div>
   )
 }
