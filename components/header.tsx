@@ -3,13 +3,29 @@ import Link from "next/link"
 import Hamburger from "./hamburger"
 import { FaConnectdevelop, FaInstagram, FaLinkedin } from "react-icons/fa"
 import { CiLogout } from "react-icons/ci"
+import { useUserSession } from "@/lib/hooks"
+import { logOut } from "@/lib/auth"
+import { useRouter } from "next/navigation"
+import { User } from "firebase/auth"
 
 export default function Header() {
-  const isLogged: boolean = false
+  const userSession = useUserSession(null)
+  const user: User | null = userSession
+  const router = useRouter()
 
   function hamburgerMenuToggle(): void {
     document.getElementById("hamburger-menu")?.classList.toggle("open")
     document.getElementById("modal")?.classList.toggle("show-modal")
+  }
+
+  async function onLogout() {
+    try {
+      await logOut()
+    } catch (error) {
+      console.error(error)
+    } finally {
+      router.push("/")
+    }
   }
 
   return (
@@ -26,45 +42,27 @@ export default function Header() {
         </ul>
       </nav>
       <nav className="hidden lg:flex">
-        <ul className="flex items-center justify-center gap-4">
-          <li className="p-4">
-            <Link
-              href="https://www.linkedin.com/in/clement-mailliere/"
-              target="_blank"
-            >
-              <FaLinkedin className="text-[1.7rem] opacity-70 transition-all ease-in cursor-pointer hover:opacity-100" />
-            </Link>
-          </li>
-          <li className="p-4">
-            <Link href="https://www.instagram.com/ness.mkart/" target="_blank">
-              <FaInstagram className="text-[1.7rem] opacity-70 transition-all ease-in cursor-pointer hover:opacity-100" />
-            </Link>
-          </li>
-          {isLogged ? (
-            <li className="p-4">
-              <CiLogout className="text-[1.7rem] opacity-70 transition-all ease-in cursor-pointer hover:opacity-100" />
-            </li>
-          ) : (
-            <li className="p-4">
-              <Link href="/signin">
-                <FaConnectdevelop className="text-[1.7rem] opacity-70 transition-all ease-in cursor-pointer hover:opacity-100" />
-              </Link>
-            </li>
-          )}
-        </ul>
+        <SocialLinks user={user} onLogout={onLogout} />
       </nav>
       <Hamburger hamburgerMenuToggle={hamburgerMenuToggle} />
-      <NavModal hamburgerMenuToggle={hamburgerMenuToggle} />
+      <NavModal
+        user={user}
+        hamburgerMenuToggle={hamburgerMenuToggle}
+        onLogout={onLogout}
+      />
     </>
   )
 }
 
 function NavModal({
+  user,
   hamburgerMenuToggle,
+  onLogout,
 }: {
+  user: any
   hamburgerMenuToggle: () => void
+  onLogout: () => void
 }) {
-  const isLogged: boolean = false
   return (
     <div
       id="modal"
@@ -91,35 +89,7 @@ function NavModal({
           </ul>
         </nav>
         <nav>
-          <ul className="flex items-center justify-center gap-4">
-            <li className="p-4">
-              <Link
-                href="https://www.linkedin.com/in/clement-mailliere/"
-                target="_blank"
-              >
-                <FaLinkedin className="text-[1.7rem] opacity-70 transition-all ease-in cursor-pointer hover:opacity-100" />
-              </Link>
-            </li>
-            <li className="p-4">
-              <Link
-                href="https://www.instagram.com/ness.mkart/"
-                target="_blank"
-              >
-                <FaInstagram className="text-[1.7rem] opacity-70 transition-all ease-in cursor-pointer hover:opacity-100" />
-              </Link>
-            </li>
-            {isLogged ? (
-              <li className="p-4">
-                <CiLogout className="text-[1.7rem] opacity-70 transition-all ease-in cursor-pointer hover:opacity-100" />
-              </li>
-            ) : (
-              <li className="p-4">
-                <Link href="/signin">
-                  <FaConnectdevelop className="text-[1.7rem] opacity-70 transition-all ease-in cursor-pointer hover:opacity-100" />
-                </Link>
-              </li>
-            )}
-          </ul>
+          <SocialLinks user={user} onLogout={onLogout} />
         </nav>
       </div>
     </div>
@@ -144,5 +114,39 @@ function ModalNavLink({
         {title}
       </Link>
     </li>
+  )
+}
+
+function SocialLinks({ user, onLogout }: { user: any; onLogout: () => void }) {
+  return (
+    <ul className="flex items-center justify-center gap-4">
+      <li className="p-4">
+        <Link
+          href="https://www.linkedin.com/in/clement-mailliere/"
+          target="_blank"
+        >
+          <FaLinkedin className="text-[1.7rem] opacity-70 transition-all ease-in cursor-pointer hover:opacity-100" />
+        </Link>
+      </li>
+      <li className="p-4">
+        <Link href="https://www.instagram.com/ness.mkart/" target="_blank">
+          <FaInstagram className="text-[1.7rem] opacity-70 transition-all ease-in cursor-pointer hover:opacity-100" />
+        </Link>
+      </li>
+      {user ? (
+        <li className="p-4">
+          <CiLogout
+            className="text-[1.7rem] opacity-70 transition-all ease-in cursor-pointer hover:opacity-100"
+            onClick={onLogout}
+          />
+        </li>
+      ) : (
+        <li className="p-4">
+          <Link href="/login">
+            <FaConnectdevelop className="text-[1.7rem] opacity-70 transition-all ease-in cursor-pointer hover:opacity-100" />
+          </Link>
+        </li>
+      )}
+    </ul>
   )
 }
