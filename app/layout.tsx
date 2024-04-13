@@ -3,6 +3,7 @@ import "./globals.css"
 import { montserrat } from "@/styles/font"
 import { ReactNode } from "react"
 import Header from "@/components/header"
+import HeaderShell from "@/components/header-shell"
 
 export const metadata: Metadata = {
   title: "Clement Mailliere - Portfolio",
@@ -16,8 +17,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={montserrat.className}>
-        <Header />
+      <body className={`${montserrat.className} relative`}>
+        <HeaderShell headerContent={<Header />} />
         {children}
       </body>
     </html>

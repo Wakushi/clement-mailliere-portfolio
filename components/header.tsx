@@ -13,7 +13,7 @@ export default function Header() {
   }
 
   return (
-    <header className="fixed flex items-center justify-between top-0 z-10 w-full p-2 md:py-[2rem] md:px-[4rem] text-white transition duration-500 bg-gradient-to-t from-transparent to-black">
+    <>
       <Link href="/" className="flex flex-col items-center cursor-pointer">
         <h2 className="font-bold text-[1.3rem] uppercase">Clément Mailliere</h2>
         <p>2D/FX Animator / Illustrator</p>
@@ -55,7 +55,7 @@ export default function Header() {
       </nav>
       <Hamburger hamburgerMenuToggle={hamburgerMenuToggle} />
       <NavModal />
-    </header>
+    </>
   )
 }
 
@@ -113,7 +113,9 @@ function NavModal() {
 function ModalNavLink({ href, title }: { href: string; title: string }) {
   return (
     <li className="uppercase text-white text-center p-10 cursor-pointer lg:p-4 lg:px-6 lg:gap-2.5">
-      <Link href={href}>{title}</Link>
+      <Link href={href} className="relative nav-link-text">
+        {title}
+      </Link>
     </li>
   )
 }
