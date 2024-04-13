@@ -5,6 +5,8 @@ import { FaConnectdevelop, FaInstagram, FaLinkedin } from "react-icons/fa"
 import { CiLogout } from "react-icons/ci"
 
 export default function Header() {
+  const isLogged: boolean = false
+
   function hamburgerMenuToggle(): void {
     document.getElementById("hamburger-menu")?.classList.toggle("open")
     document.getElementById("modal")?.classList.toggle("show-modal")
@@ -16,6 +18,41 @@ export default function Header() {
         <h2 className="font-bold text-[1.3rem] uppercase">Clément Mailliere</h2>
         <p>2D/FX Animator / Illustrator</p>
       </Link>
+      <nav className="hidden lg:flex">
+        <ul className="flex justify-center">
+          <ModalNavLink href="/drawings" title="Drawings" />
+          <ModalNavLink href="/animations" title="Animations" />
+          <ModalNavLink href="/sketches" title="Sketches" />
+        </ul>
+      </nav>
+      <nav className="hidden lg:flex">
+        <ul className="flex items-center justify-center gap-4">
+          <li className="p-4">
+            <Link
+              href="https://www.linkedin.com/in/clement-mailliere/"
+              target="_blank"
+            >
+              <FaLinkedin className="text-[1.7rem] opacity-70 transition-all ease-in cursor-pointer hover:opacity-100" />
+            </Link>
+          </li>
+          <li className="p-4">
+            <Link href="https://www.instagram.com/ness.mkart/" target="_blank">
+              <FaInstagram className="text-[1.7rem] opacity-70 transition-all ease-in cursor-pointer hover:opacity-100" />
+            </Link>
+          </li>
+          {isLogged ? (
+            <li className="p-4">
+              <CiLogout className="text-[1.7rem] opacity-70 transition-all ease-in cursor-pointer hover:opacity-100" />
+            </li>
+          ) : (
+            <li className="p-4">
+              <Link href="/signin">
+                <FaConnectdevelop className="text-[1.7rem] opacity-70 transition-all ease-in cursor-pointer hover:opacity-100" />
+              </Link>
+            </li>
+          )}
+        </ul>
+      </nav>
       <Hamburger hamburgerMenuToggle={hamburgerMenuToggle} />
       <NavModal />
     </header>
@@ -75,7 +112,7 @@ function NavModal() {
 
 function ModalNavLink({ href, title }: { href: string; title: string }) {
   return (
-    <li className="uppercase text-white text-center p-10 cursor-pointer hover:bg-[#111] hover:shadow-inner focus:bg-[#111] focus:shadow-inner lg:p-4 lg:px-6 lg:gap-2.5">
+    <li className="uppercase text-white text-center p-10 cursor-pointer lg:p-4 lg:px-6 lg:gap-2.5">
       <Link href={href}>{title}</Link>
     </li>
   )
