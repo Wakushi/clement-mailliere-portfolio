@@ -54,12 +54,16 @@ export default function Header() {
         </ul>
       </nav>
       <Hamburger hamburgerMenuToggle={hamburgerMenuToggle} />
-      <NavModal />
+      <NavModal hamburgerMenuToggle={hamburgerMenuToggle} />
     </>
   )
 }
 
-function NavModal() {
+function NavModal({
+  hamburgerMenuToggle,
+}: {
+  hamburgerMenuToggle: () => void
+}) {
   const isLogged: boolean = false
   return (
     <div
@@ -69,9 +73,21 @@ function NavModal() {
       <div className="modal">
         <nav>
           <ul className="flex flex-col justify-center">
-            <ModalNavLink href="/drawings" title="Drawings" />
-            <ModalNavLink href="/animations" title="Animations" />
-            <ModalNavLink href="/sketches" title="Sketches" />
+            <ModalNavLink
+              href="/drawings"
+              title="Drawings"
+              hamburgerMenuToggle={hamburgerMenuToggle}
+            />
+            <ModalNavLink
+              href="/animations"
+              title="Animations"
+              hamburgerMenuToggle={hamburgerMenuToggle}
+            />
+            <ModalNavLink
+              href="/sketches"
+              title="Sketches"
+              hamburgerMenuToggle={hamburgerMenuToggle}
+            />
           </ul>
         </nav>
         <nav>
@@ -110,9 +126,20 @@ function NavModal() {
   )
 }
 
-function ModalNavLink({ href, title }: { href: string; title: string }) {
+function ModalNavLink({
+  href,
+  title,
+  hamburgerMenuToggle,
+}: {
+  href: string
+  title: string
+  hamburgerMenuToggle?: () => void
+}) {
   return (
-    <li className="uppercase text-white text-center p-10 cursor-pointer lg:p-4 lg:px-6 lg:gap-2.5">
+    <li
+      className="uppercase text-white text-center p-10 cursor-pointer lg:p-4 lg:px-6 lg:gap-2.5"
+      onClick={hamburgerMenuToggle}
+    >
       <Link href={href} className="relative nav-link-text">
         {title}
       </Link>

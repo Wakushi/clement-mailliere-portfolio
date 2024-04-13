@@ -1,10 +1,25 @@
 import { Media } from "@/lib/types"
 import Image from "next/image"
 
-export default function MediaCard({ media }: { media: Media }) {
+export default function MediaCard({
+  media,
+  toggleModal,
+  setSelectedMediaUrl,
+}: {
+  media: Media
+  toggleModal: () => void
+  setSelectedMediaUrl: (mediaUrl: string) => void
+}) {
   const { id, imageUrl, title } = media
   return (
-    <div className="w-full" key={id}>
+    <div
+      className="w-full"
+      key={id}
+      onClick={() => {
+        setSelectedMediaUrl(imageUrl)
+        toggleModal()
+      }}
+    >
       <Image
         src={imageUrl}
         alt={title}

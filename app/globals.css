@@ -21,6 +21,10 @@ body {
   background-color: #111;
 }
 
+body.scrolled {
+  overflow: hidden;
+}
+
 *,
 body {
   box-sizing: border-box;

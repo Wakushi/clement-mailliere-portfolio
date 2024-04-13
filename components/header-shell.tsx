@@ -26,7 +26,7 @@ export default function HeaderShell({
   }, [])
 
   return (
-    <header className="fixed flex items-center justify-between top-0 z-10 w-full p-2 md:py-[2rem] md:px-[4rem] text-white transition duration-500 bg-gradient-to-t from-transparent to-black">
+    <header className="fixed flex items-center justify-between top-0 z-[3] w-full p-2 md:py-[2rem] md:px-[4rem] text-white transition duration-500 bg-gradient-to-t from-transparent to-black">
       {headerContent}
     </header>
   )
