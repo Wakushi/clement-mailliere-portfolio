@@ -3,6 +3,7 @@ import Link from "next/link"
 import Hamburger from "./hamburger"
 import { FaConnectdevelop, FaInstagram, FaLinkedin } from "react-icons/fa"
 import { CiLogout } from "react-icons/ci"
+import { MdDashboard } from "react-icons/md"
 import { useUserSession } from "@/lib/hooks"
 import { logOut } from "@/lib/auth"
 import { useRouter } from "next/navigation"
@@ -41,8 +42,9 @@ export default function Header() {
           <ModalNavLink href="/sketches" title="Sketches" />
         </ul>
       </nav>
-      <nav className="hidden lg:flex">
-        <SocialLinks user={user} onLogout={onLogout} />
+      <nav className="hidden lg:flex items-center justify-center gap-4">
+        <SocialLinks />
+        <LogButton user={user} onLogout={onLogout} />
       </nav>
       <Hamburger hamburgerMenuToggle={hamburgerMenuToggle} />
       <NavModal
@@ -88,8 +90,13 @@ function NavModal({
             />
           </ul>
         </nav>
-        <nav>
-          <SocialLinks user={user} onLogout={onLogout} />
+        <nav className="flex items-center justify-center gap-4">
+          <SocialLinks />
+          <LogButton
+            user={user}
+            onLogout={onLogout}
+            hamburgerMenuToggle={hamburgerMenuToggle}
+          />
         </nav>
       </div>
     </div>
@@ -117,7 +124,7 @@ function ModalNavLink({
   )
 }
 
-function SocialLinks({ user, onLogout }: { user: any; onLogout: () => void }) {
+function SocialLinks() {
   return (
     <ul className="flex items-center justify-center gap-4">
       <li className="p-4">
@@ -133,16 +140,38 @@ function SocialLinks({ user, onLogout }: { user: any; onLogout: () => void }) {
           <FaInstagram className="text-[1.7rem] opacity-70 transition-all ease-in cursor-pointer hover:opacity-100" />
         </Link>
       </li>
+    </ul>
+  )
+}
+
+function LogButton({
+  user,
+  onLogout,
+  hamburgerMenuToggle,
+}: {
+  user: any
+  onLogout: () => void
+  hamburgerMenuToggle?: () => void
+}) {
+  return (
+    <ul className="flex items-center justify-center gap-4">
       {user ? (
-        <li className="p-4">
-          <CiLogout
-            className="text-[1.7rem] opacity-70 transition-all ease-in cursor-pointer hover:opacity-100"
-            onClick={onLogout}
-          />
-        </li>
+        <>
+          <li className="p-4">
+            <Link onClick={hamburgerMenuToggle} href="/dashboard">
+              <MdDashboard className="text-[1.7rem] opacity-70 transition-all ease-in cursor-pointer hover:opacity-100" />
+            </Link>
+          </li>
+          <li className="p-4">
+            <CiLogout
+              className="text-[1.7rem] opacity-70 transition-all ease-in cursor-pointer hover:opacity-100"
+              onClick={onLogout}
+            />
+          </li>
+        </>
       ) : (
         <li className="p-4">
-          <Link href="/login">
+          <Link onClick={hamburgerMenuToggle} href="/login">
             <FaConnectdevelop className="text-[1.7rem] opacity-70 transition-all ease-in cursor-pointer hover:opacity-100" />
           </Link>
         </li>

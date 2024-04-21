@@ -13,7 +13,7 @@ export default function MediaCard({
   const { id, imageUrl, title } = media
   return (
     <div
-      className="w-full"
+      className="w-full max-w-[400px] md:max-w-[800px]"
       key={id}
       onClick={() => {
         setSelectedMediaUrl(imageUrl)

@@ -26,7 +26,12 @@ export default function LandingPage() {
               title="Sketches"
             />
             {/* DEMO LINK */}
-            <NavLink href="/demo" src="/images/demo.gif" title="Demo" />
+            <NavLink
+              href="/demo"
+              src="/images/demo.gif"
+              title="Demo"
+              demo={true}
+            />
           </ul>
         </nav>
       </section>
