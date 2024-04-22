@@ -1,30 +1,39 @@
+"use client"
 import { Media } from "@/lib/types"
 import MediaCard from "./media-card"
+import { useState } from "react"
+import MediaModal from "./media-modal"
 
-interface MediaListProps {
-  medias: Media[]
-  toggleModal: () => void
-  setSelectedMediaUrl: (url: string) => void
-  adminView: boolean
-}
+export default function MediaList({ medias }: { medias: Media[] }) {
+  const [showModal, setShowModal] = useState<boolean>(false)
+  const [selectedMediaUrl, setSelectedMediaUrl] = useState<string>("")
 
-export default function MediaList({
-  medias,
-  toggleModal,
-  setSelectedMediaUrl,
-  adminView,
-}: MediaListProps) {
+  function toggleModal(): void {
+    setShowModal(!showModal)
+    if (!showModal) {
+      document.body.classList.add("scrolled")
+    } else {
+      document.body.classList.remove("scrolled")
+    }
+  }
   return (
     <>
-      {medias.map((media) => (
-        <MediaCard
-          key={media.id}
-          media={media}
+      <div className="flex flex-wrap gap-2 justify-center items-center">
+        {medias.map((media) => (
+          <MediaCard
+            key={media.id}
+            media={media}
+            toggleModal={toggleModal}
+            setSelectedMediaUrl={setSelectedMediaUrl}
+          />
+        ))}
+      </div>
+      {showModal && (
+        <MediaModal
           toggleModal={toggleModal}
-          setSelectedMediaUrl={setSelectedMediaUrl}
-          adminView={adminView}
+          selectedMediaUrl={selectedMediaUrl}
         />
-      ))}
+      )}
     </>
   )
 }

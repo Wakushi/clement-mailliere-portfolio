@@ -14,7 +14,7 @@ export default function AddMediaModal({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="w-[100px] h-[100px] border border-gray-700 text-gray-700 flex items-center justify-center text-3xl">
+        <div className="w-[100px] h-[100px] max-w-[100px] max-h-[100px] lg:w-[300px] lg:h-[300px] lg:max-w-[300px] lg:max-h-[300px] border border-gray-700 text-gray-700 flex items-center justify-center text-3xl">
           +
         </div>
       </DialogTrigger>

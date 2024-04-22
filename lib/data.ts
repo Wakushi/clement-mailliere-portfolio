@@ -1,5 +1,14 @@
 import { db } from "../firebase"
-import { collection, getDocs, query, where } from "firebase/firestore"
+import {
+  addDoc,
+  collection,
+  doc,
+  getDocs,
+  or,
+  query,
+  setDoc,
+  where,
+} from "firebase/firestore"
 import { Media } from "./types"
 
 export async function fetchMedias(type?: Media["type"]) {
@@ -14,6 +23,27 @@ export async function fetchMedias(type?: Media["type"]) {
     } as Media)
   })
   return medias
+}
+
+export async function createMedia(media: Media) {
+  const targetCollection = await fetchMedias(media.type)
+  await addDoc(collection(db, "medias"), {
+    title: media.title,
+    description: media.description,
+    imageUrl: media.imageUrl,
+    type: media.type,
+    order: targetCollection.length,
+  })
+}
+
+export async function updateMedia(media: Media) {
+  await setDoc(doc(db, "medias", media.id), {
+    title: media.title,
+    description: media.description,
+    imageUrl: media.imageUrl,
+    type: media.type,
+    order: media.order,
+  })
 }
 
 export async function generateImage(imageFile: File): Promise<string> {

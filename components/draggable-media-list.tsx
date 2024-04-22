@@ -11,12 +11,14 @@ import {
 import { useState } from "react"
 import {
   SortableContext,
-  horizontalListSortingStrategy,
+  rectSwappingStrategy,
   sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable"
 import { arrayMove } from "@dnd-kit/sortable"
 import { Media } from "@/lib/types"
 import MediaCard from "./media-card"
+import AddMediaModal from "./add-media-modal"
+import { updateMedia } from "@/lib/data"
 
 export default function DraggableMediaList({
   medias,
@@ -38,18 +40,27 @@ export default function DraggableMediaList({
     }
   }
 
+  async function updateMediaOrder(selectedMedia: Media) {
+    await updateMedia({ ...selectedMedia })
+  }
+
   const getItemPosition = (id: string) => {
     return items.findIndex((item) => item.id === id)
   }
 
-  const handleDragEnd = (event: any) => {
+  async function handleDragEnd(event: any) {
     const { active, over } = event
     if (active.id !== over.id) {
-      setItems((items) => {
-        const oldPos = getItemPosition(active.id)
-        const newPos = getItemPosition(over.id)
-        return arrayMove(items, oldPos, newPos)
-      })
+      const oldPos = getItemPosition(active.id)
+      const newPos = getItemPosition(over.id)
+      const itemA = items[oldPos]
+      const itemB = items[newPos]
+      itemA.order = newPos
+      itemB.order = oldPos
+      updateMediaOrder(itemA)
+      updateMediaOrder(itemB)
+      const sortedArray = arrayMove(items, oldPos, newPos)
+      setItems(sortedArray)
     }
   }
 
@@ -68,8 +79,9 @@ export default function DraggableMediaList({
         collisionDetection={closestCorners}
         sensors={sensors}
       >
-        <SortableContext items={items} strategy={horizontalListSortingStrategy}>
-          <div className="flex gap-2">
+        <SortableContext items={items} strategy={rectSwappingStrategy}>
+          <div className="flex flex-wrap gap-2 justify-center">
+            {/* <AddMediaModal type={mediaType} /> */}
             {items.map((media) => (
               <MediaCard
                 key={media.id}

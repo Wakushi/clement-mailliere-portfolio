@@ -13,7 +13,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
 import { Button } from "./ui/button"
 import { generateImage } from "@/lib/data"
-import { Media } from "@/lib/types"
 
 const formSchema = z.object({
   title: z.string(),

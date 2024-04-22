@@ -4,5 +4,5 @@ export type Media = {
   description: string
   imageUrl: string
   type: "drawing" | "animation" | "sketch"
-  order?: number
+  order: number
 }
