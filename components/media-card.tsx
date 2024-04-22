@@ -1,19 +1,25 @@
 import { Media } from "@/lib/types"
+import clsx from "clsx"
 import Image from "next/image"
 
 export default function MediaCard({
   media,
   toggleModal,
   setSelectedMediaUrl,
+  adminView = false,
 }: {
   media: Media
   toggleModal: () => void
   setSelectedMediaUrl: (mediaUrl: string) => void
+  adminView?: boolean
 }) {
   const { id, imageUrl, title } = media
   return (
     <div
-      className="w-full max-w-[400px] md:max-w-[800px]"
+      className={clsx("w-full max-w-[400px] md:max-w-[800px]", {
+        "max-w-[100px]": adminView,
+        "max-h-[100px]": adminView,
+      })}
       key={id}
       onClick={() => {
         setSelectedMediaUrl(imageUrl)

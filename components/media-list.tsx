@@ -3,8 +3,18 @@ import { Media } from "@/lib/types"
 import MediaCard from "./media-card"
 import { useState } from "react"
 import MediaModal from "./media-modal"
+import clsx from "clsx"
+import AddMediaModal from "./add-media-modal"
 
-export default function MediaList({ medias }: { medias: Media[] }) {
+export default function MediaList({
+  medias,
+  type,
+  adminView = false,
+}: {
+  medias: Media[]
+  type: "drawing" | "animation" | "sketch"
+  adminView?: boolean
+}) {
   const [showModal, setShowModal] = useState<boolean>(false)
   const [selectedMediaUrl, setSelectedMediaUrl] = useState<string>("")
 
@@ -16,16 +26,21 @@ export default function MediaList({ medias }: { medias: Media[] }) {
       document.body.classList.remove("scrolled")
     }
   }
-
   return (
     <>
-      <div className="flex justify-center items-center flex-wrap gap-2">
+      <div
+        className={clsx("flex flex-wrap gap-2 justify-around", {
+          "justify-center items-center": !adminView,
+        })}
+      >
+        {adminView && <AddMediaModal type={type} />}
         {medias.map((media) => (
           <MediaCard
             key={media.id}
             media={media}
             toggleModal={toggleModal}
             setSelectedMediaUrl={setSelectedMediaUrl}
+            adminView={adminView}
           />
         ))}
       </div>
