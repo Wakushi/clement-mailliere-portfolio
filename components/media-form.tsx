@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
 import { Button } from "./ui/button"
 import { generateImage } from "@/lib/data"
+import { Media } from "@/lib/types"
 
 const formSchema = z.object({
   title: z.string(),
@@ -49,43 +50,27 @@ export default function MediaForm({
 
   async function onSubmit(formValues: z.infer<typeof formSchema>) {
     setIsSubmitting(true)
-    const newMedia = {
-      title: formValues.title,
-      description: formValues.description,
-      type,
-      image: selectedImage,
-    }
-
-    const formData = new FormData()
-    formData.append("image", selectedImage[0]) // selectedImage is an array of files
-
     try {
+      const formData = new FormData()
+      formData.append("image", selectedImage[0])
       const imageUrl = await generateImage(selectedImage[0])
-      console.log("imageUrl", imageUrl)
-      //   const imgResponse = await fetch(
-      //     `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/upload-image` ?? "",
-      //     {
-      //       method: "POST",
-      //       headers: {
-      //         "Content-Type": "multipart/form-data",
-      //       },
-      //       body: formData,
-      //     }
-      //   )
-      //   const imageResponseData = await imgResponse.json()
-      //   console.log("imageResponseData", imageResponseData)
-
-      //   const response = await fetch(
-      //     `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/media` ?? "",
-      //     {
-      //       method: "POST",
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //       },
-      //       body: JSON.stringify(newMedia),
-      //     }
-      //   )
-      //   const data = await response.json()
+      const newMedia = {
+        title: formValues.title ?? "",
+        description: formValues.description ?? "",
+        type,
+        imageUrl,
+      }
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/media` ?? "",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newMedia),
+        }
+      )
+      const data = await response.json()
       if (true) {
         setIsSuccess(true)
       }

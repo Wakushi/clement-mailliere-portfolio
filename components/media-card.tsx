@@ -16,9 +16,9 @@ export default function MediaCard({
   const { id, imageUrl, title } = media
   return (
     <div
-      className={clsx("w-full max-w-[400px] md:max-w-[800px]", {
-        "max-w-[100px]": adminView,
-        "max-h-[100px]": adminView,
+      className={clsx("w-full", {
+        "max-w-[100px] max-h-[100px]": adminView,
+        "max-w-[400px] md:max-w-[800px]": !adminView,
       })}
       key={id}
       onClick={() => {
