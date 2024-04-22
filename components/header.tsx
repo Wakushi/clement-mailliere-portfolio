@@ -158,7 +158,7 @@ function LogButton({
       {user ? (
         <>
           <li className="p-4">
-            <Link onClick={hamburgerMenuToggle} href="/dashboard">
+            <Link onClick={hamburgerMenuToggle} href="/dashboard/drawings">
               <MdDashboard className="text-[1.7rem] opacity-70 transition-all ease-in cursor-pointer hover:opacity-100" />
             </Link>
           </li>
