@@ -4,7 +4,13 @@ import MediaCard from "./media-card"
 import { useState } from "react"
 import MediaModal from "./media-modal"
 
-export default function MediaList({ medias }: { medias: Media[] }) {
+export default function MediaList({
+  medias,
+  adminView = false,
+}: {
+  medias: Media[]
+  adminView?: boolean
+}) {
   const [showModal, setShowModal] = useState<boolean>(false)
   const [selectedMediaUrl, setSelectedMediaUrl] = useState<string>("")
 
@@ -25,6 +31,7 @@ export default function MediaList({ medias }: { medias: Media[] }) {
             media={media}
             toggleModal={toggleModal}
             setSelectedMediaUrl={setSelectedMediaUrl}
+            adminView={adminView}
           />
         ))}
       </div>

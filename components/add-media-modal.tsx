@@ -2,6 +2,7 @@
 import { useState } from "react"
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog"
 import MediaForm from "./media-form"
+import { Button } from "./ui/button"
 
 export default function AddMediaModal({
   type,
@@ -11,19 +12,41 @@ export default function AddMediaModal({
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const [isSuccess, setIsSuccess] = useState<boolean>(false)
 
+  const DialogContentState = () => {
+    if (isSubmitting) {
+      return (
+        <div className="flex flex-col items-center justify-center w-full h-full">
+          <h1 className="text-2xl font-bold text-white">Uploading...</h1>
+        </div>
+      )
+    }
+
+    if (isSuccess) {
+      return (
+        <div className="flex flex-col items-center justify-center w-full h-full">
+          <h1 className="text-2xl font-bold text-white">Success!</h1>
+        </div>
+      )
+    }
+
+    return (
+      <MediaForm
+        type={type}
+        setIsSubmitting={setIsSubmitting}
+        setIsSuccess={setIsSuccess}
+      />
+    )
+  }
+
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="w-[100px] h-[100px] max-w-[100px] max-h-[100px] lg:w-[300px] lg:h-[300px] lg:max-w-[300px] lg:max-h-[300px] border border-gray-700 text-gray-700 flex items-center justify-center text-3xl">
-          +
-        </div>
+        <Button className="bg-indigo-800 w-full hover:text-indigo-800 hover:bg-white px-4 py-2 rounded font-bold text-md">
+          New
+        </Button>
       </DialogTrigger>
-      <DialogContent className="min-h-[100vh] max-h-[100vh] rounded overflow-auto p-4">
-        <MediaForm
-          type={type}
-          setIsSubmitting={setIsSubmitting}
-          setIsSuccess={setIsSuccess}
-        />
+      <DialogContent className="min-h-[100vh] max-h-[100vh] w-full max-w-[100vw] rounded overflow-auto bg-slate-900 flex">
+        <DialogContentState />
       </DialogContent>
     </Dialog>
   )

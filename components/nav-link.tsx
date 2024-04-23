@@ -2,7 +2,7 @@
 import clsx from "clsx"
 import Image from "next/image"
 import Link from "next/link"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { IoIosClose, IoMdArrowDropright } from "react-icons/io"
 
 interface NavLinkProps {
@@ -43,6 +43,9 @@ export default function NavLink({
       )}
       <Image
         className="scale-105"
+        unoptimized={
+          title === "Demo" || title === "Animations" || title === "Skecthes"
+        }
         src={src}
         alt={title}
         width={0}

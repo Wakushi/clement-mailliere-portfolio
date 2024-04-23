@@ -17,17 +17,18 @@ import {
 import { arrayMove } from "@dnd-kit/sortable"
 import { Media } from "@/lib/types"
 import MediaCard from "./media-card"
-import AddMediaModal from "./add-media-modal"
-import { updateMedia } from "@/lib/data"
+
+interface DraggableMediaListProps {
+  items: Media[]
+  setItems: (items: Media[]) => void
+  setUpdatedListOrder: (updatedListOrder: boolean) => void
+}
 
 export default function DraggableMediaList({
-  medias,
-  mediaType,
-}: {
-  medias: Media[]
-  mediaType: "drawing" | "animation" | "sketch"
-}) {
-  const [items, setItems] = useState(medias)
+  items,
+  setItems,
+  setUpdatedListOrder,
+}: DraggableMediaListProps) {
   const [showModal, setShowModal] = useState<boolean>(false)
   const [selectedMediaUrl, setSelectedMediaUrl] = useState<string>("")
 
@@ -40,27 +41,17 @@ export default function DraggableMediaList({
     }
   }
 
-  async function updateMediaOrder(selectedMedia: Media) {
-    await updateMedia({ ...selectedMedia })
-  }
-
-  const getItemPosition = (id: string) => {
-    return items.findIndex((item) => item.id === id)
-  }
-
   async function handleDragEnd(event: any) {
+    const getItemPosition = (id: string) => {
+      return items.findIndex((item) => item.id === id)
+    }
+
     const { active, over } = event
     if (active.id !== over.id) {
       const oldPos = getItemPosition(active.id)
       const newPos = getItemPosition(over.id)
-      const itemA = items[oldPos]
-      const itemB = items[newPos]
-      itemA.order = newPos
-      itemB.order = oldPos
-      updateMediaOrder(itemA)
-      updateMediaOrder(itemB)
-      const sortedArray = arrayMove(items, oldPos, newPos)
-      setItems(sortedArray)
+      setItems(arrayMove(items, oldPos, newPos))
+      setUpdatedListOrder(true)
     }
   }
 
@@ -81,7 +72,6 @@ export default function DraggableMediaList({
       >
         <SortableContext items={items} strategy={rectSwappingStrategy}>
           <div className="flex flex-wrap gap-2 justify-center">
-            {/* <AddMediaModal type={mediaType} /> */}
             {items.map((media) => (
               <MediaCard
                 key={media.id}

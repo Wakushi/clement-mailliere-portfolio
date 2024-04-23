@@ -20,21 +20,24 @@ export default function MediaCard({
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id })
   const style = { transform: CSS.Transform.toString(transform), transition }
+
   return (
     <div
       ref={setNodeRef}
       {...attributes}
       {...listeners}
       style={style}
-      className={clsx("w-full", {
+      className={clsx("w-full relative", {
         "w-[100px] h-[100px] max-w-[100px] max-h-[100px] lg:w-[300px] lg:h-[300px] lg:max-w-[300px] lg:max-h-[300px] touch-none":
           adminView,
         "max-w-[400px] md:max-w-[800px]": !adminView,
       })}
-      key={id}
+      key={imageUrl}
       onClick={() => {
-        setSelectedMediaUrl(imageUrl)
-        toggleModal()
+        if (!adminView) {
+          setSelectedMediaUrl(imageUrl)
+          toggleModal()
+        }
       }}
     >
       <Image

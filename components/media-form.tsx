@@ -1,3 +1,4 @@
+"use client"
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -12,7 +13,7 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
 import { Button } from "./ui/button"
-import { generateImage } from "@/lib/data"
+import { createMedia } from "@/lib/data"
 
 const formSchema = z.object({
   title: z.string(),
@@ -52,25 +53,15 @@ export default function MediaForm({
     try {
       const formData = new FormData()
       formData.append("image", selectedImage[0])
-      const imageUrl = await generateImage(selectedImage[0])
-      const newMedia = {
+      const imageUrl = "https://i.imgur.com/R9KBfO1.jpg"
+      // await generateImage(selectedImage[0])
+      const response = await createMedia({
         title: formValues.title ?? "",
         description: formValues.description ?? "",
         type,
         imageUrl,
-      }
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/media` ?? "",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newMedia),
-        }
-      )
-      const data = await response.json()
-      if (true) {
+      })
+      if (response) {
         setIsSuccess(true)
       }
     } catch (error) {
@@ -84,7 +75,7 @@ export default function MediaForm({
     <Form {...mediaForm}>
       <form
         onSubmit={mediaForm.handleSubmit(onSubmit)}
-        className="flex flex-col gap-2"
+        className="flex flex-col gap-2 p-4 w-full"
       >
         <FormField
           control={mediaForm.control}
@@ -131,7 +122,10 @@ export default function MediaForm({
         />
         <label htmlFor="image">Image (10Mb max)</label>
         <input id="image" type="file" onChange={(e) => onSelectImage(e)} />
-        <Button type="submit" className="mt-4">
+        <Button
+          type="submit"
+          className="bg-indigo-800 w-full hover:text-indigo-800 hover:bg-white px-4 py-2 rounded font-bold text-md mt-4"
+        >
           Create
         </Button>
       </form>
