@@ -90,11 +90,25 @@ function MediaEditModal({
       return <LoaderSmall />
     }
     if (isSuccess) {
-      return <p>{successMessage}</p>
+      return (
+        <div>
+          <div>
+            <Image
+              src="/images/ok.gif"
+              alt="media"
+              width={0}
+              height={0}
+              style={{ width: "100%", height: "100%" }}
+              sizes="100vw"
+            />
+          </div>
+          <p className="text-lg font-bold">{successMessage}</p>
+        </div>
+      )
     }
     return (
       <div className="opacity-0 fade-in-bottom flex flex-col gap-2">
-        <div className="w-[300px]">
+        <div className="w-[300px] h-[300px]">
           <Image
             src={selectedMedia.imageUrl}
             alt="media"

@@ -11,6 +11,7 @@ import {
   writeBatch,
 } from "firebase/firestore"
 import { Media } from "./types"
+import { deleteObject, getStorage, ref } from "firebase/storage"
 
 export async function fetchMedias(type?: Media["type"]) {
   "no-store"
@@ -113,4 +114,38 @@ export async function generateImage(imageFile: File): Promise<string> {
 
   const data = await response.json()
   return data.data.link
+}
+
+export async function deleteVideo(path: string): Promise<boolean> {
+  const storage = getStorage()
+  const videoRef = ref(storage, path)
+  try {
+    await deleteObject(videoRef)
+    return true
+  } catch (error) {
+    console.error("Error deleting file:", error)
+    return false
+  }
+}
+
+export async function setVideoUrl({ url }: { url: string }): Promise<boolean> {
+  try {
+    await addDoc(collection(db, "videoUrl"), {
+      url: url,
+    })
+    return true
+  } catch (error) {
+    console.error(error)
+    return false
+  }
+}
+
+export async function getVideoUrl() {
+  const videoUrlRef = collection(db, "videoUrl")
+  const querySnapshot = await getDocs(videoUrlRef)
+  let url = ""
+  querySnapshot.forEach((doc) => {
+    url = doc.data().url
+  })
+  return url
 }

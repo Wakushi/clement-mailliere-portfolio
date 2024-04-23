@@ -53,7 +53,7 @@ export default function MediaUpdateForm({
       })
       if (response) {
         setIsSuccess(true)
-        setSuccessMessage("Media updated successfully")
+        setSuccessMessage("Media updated successfully !")
       }
     } catch (error) {
       console.error(error)
