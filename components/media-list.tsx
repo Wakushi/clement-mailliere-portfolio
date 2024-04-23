@@ -33,7 +33,7 @@ export default function MediaList({
 
   return (
     <>
-      <div className="flex flex-wrap gap-2 justify-center items-center">
+      <div className="opacity-0 fade-in flex flex-wrap gap-2 justify-center items-center">
         {medias.map((media) => (
           <MediaCard
             key={media.id}

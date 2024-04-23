@@ -13,7 +13,7 @@ export default function SketchesPage() {
 
   if (isLoading) {
     return (
-      <div>
+      <div className="w-full h-full min-h-[100vh]">
         <LoaderHive />
       </div>
     )

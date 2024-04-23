@@ -167,7 +167,7 @@ img {
 }
 
 .fade-in {
-  animation: fade-in 500ms 500ms ease-out forwards;
+  animation: fade-in 500ms ease-in-out forwards;
 }
 .fade-in-top {
   animation: fade-in-top 400ms ease-out forwards;
