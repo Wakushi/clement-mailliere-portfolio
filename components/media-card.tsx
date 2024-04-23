@@ -28,7 +28,7 @@ export default function MediaCard({
       {...listeners}
       style={style}
       className={clsx("w-full relative", {
-        "w-[100px] h-[100px] max-w-[100px] max-h-[100px] lg:w-[300px] lg:h-[300px] lg:max-w-[300px] lg:max-h-[300px] touch-none":
+        "w-[100px] h-[100px] max-w-[100px] max-h-[100px] md:w-[200px] md:h-[200px] md:max-w-[200px] md:max-h-[200px]  lg:w-[300px] lg:h-[300px] lg:max-w-[300px] lg:max-h-[300px] touch-none":
           adminView,
         "max-w-[400px] md:max-w-[800px]": !adminView,
       })}

@@ -113,7 +113,7 @@ export default function MediaUpdateForm({
         />
         <Button
           type="submit"
-          className="bg-indigo-800 w-full hover:text-indigo-800 hover:bg-white px-4 py-2 rounded font-bold text-md"
+          className="bg-indigo-800 w-full hover:text-indigo-800 hover:bg-white focus:text-indigo-800 focus:bg-white px-4 py-2 rounded font-bold text-md"
         >
           Update
         </Button>

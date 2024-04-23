@@ -107,8 +107,8 @@ function MediaEditModal({
       )
     }
     return (
-      <div className="opacity-0 fade-in-bottom flex flex-col gap-2">
-        <div className="w-[300px] h-[300px]">
+      <div className="opacity-0 fade-in-bottom flex flex-col gap-2 w-full max-w-[300px] md:max-w-[450px]">
+        <div className="w-[300px] h-[300px] md:w-[450px] md:h-[450px] m-auto">
           <Image
             src={selectedMedia.imageUrl}
             alt="media"
@@ -128,7 +128,7 @@ function MediaEditModal({
           />
           <Button
             onClick={onDeleteMedia}
-            className="border border-white hover:border-red-700 hover:text-red-700 w-full px-4 py-2 rounded font-bold text-md"
+            className="border border-white hover:border-red-700 hover:text-red-700 focus:border-red-700 focus:text-red-700 w-full px-4 py-2 rounded font-bold text-md"
           >
             Delete
           </Button>

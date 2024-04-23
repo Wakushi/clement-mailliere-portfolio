@@ -77,7 +77,7 @@ export default function MediaForm({
     <Form {...mediaForm}>
       <form
         onSubmit={mediaForm.handleSubmit(onSubmit)}
-        className="flex flex-col gap-2 p-4 w-full"
+        className="flex flex-col gap-2 p-4 w-full m-auto max-w-[500px]"
       >
         <FormField
           control={mediaForm.control}

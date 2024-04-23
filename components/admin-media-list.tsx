@@ -52,20 +52,20 @@ export default function AdminMediaList({
   }
 
   return (
-    <div className="flex flex-col">
-      <div className="flex flex-col p-4 gap-2">
-        <CustomSwitch mode={mode} setMode={setMode} />
+    <div className="flex flex-col justify-center items-center">
+      <div className="flex flex-col p-4 gap-2 w-full max-w-[500px]">
         <div className="flex items-center gap-2 w-full ">
           <AddMediaModal type={mediaType} refreshList={refreshList} />
           {updatedListOrder && (
             <Button
               onClick={updateList}
-              className="bg-indigo-800 w-full px-4 py-2 rounded font-bold text-md"
+              className="bg-indigo-800 w-full px-4 py-2 rounded font-bold text-md cursor-pointer"
             >
               {isLoading ? <LoaderSmall /> : "Save"}
             </Button>
           )}
         </div>
+        <CustomSwitch mode={mode} setMode={setMode} />
       </div>
       {mode === "swap" ? (
         <DraggableMediaList
@@ -91,7 +91,7 @@ function CustomSwitch({
     <div className="rounded border border-gray-700 p-2 flex items-center h-full w-full gap-2">
       <div
         className={clsx(
-          "rounded bg-indigo-800 px-4 py-2 w-full h-[40px] flex items-center justify-center",
+          "rounded bg-indigo-800 px-4 py-2 w-full h-[40px] flex items-center justify-center cursor-pointer",
           {
             "bg-white text-indigo-800 opacity-100": mode === "swap",
             "opacity-70": mode === "edit",
@@ -106,7 +106,7 @@ function CustomSwitch({
       </div>
       <div
         className={clsx(
-          "rounded bg-indigo-800 px-4 py-2 w-full h-[40px] flex items-center justify-center",
+          "rounded bg-indigo-800 px-4 py-2 w-full h-[40px] flex items-center justify-center cursor-pointer",
           {
             "bg-white text-indigo-800 opacity-100": mode === "edit",
             "opacity-70": mode === "swap",

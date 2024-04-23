@@ -1,4 +1,5 @@
 "use client"
+import clsx from "clsx"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { ReactNode } from "react"
@@ -13,17 +14,9 @@ interface PortalPageLayoutProps {
 export default function DashboardPageLayout({
   children,
 }: PortalPageLayoutProps) {
-  const pathname = usePathname()
-
-  function isActiveEndpoint(seekedPath: string): boolean {
-    const path = pathname.split("/")
-    if (path.length === 3) return seekedPath === "/"
-    return path.includes(seekedPath)
-  }
-
   return (
     <div className="w-full min-h-[100vh]">
-      <div className="flex flex-col pt-[6rem] h-fit min-h-[inherit]">
+      <div className="flex flex-col pt-[6rem] md:pt-[8rem] h-fit min-h-[inherit]">
         <div className="">
           <nav className="">
             <ul className="flex gap-4 border-t border-b border-t-gray-700 border-b-gray-700 w-full items-center justify-around">
@@ -47,6 +40,13 @@ function AdminNavLink({
   endpoint: string
   title: string
 }) {
+  const pathname = usePathname()
+
+  function isActiveEndpoint(seekedPath: string): boolean {
+    const path = pathname.split("/")
+    return path.includes(seekedPath)
+  }
+
   const Icon = () => {
     switch (endpoint) {
       case "animations":
@@ -64,13 +64,21 @@ function AdminNavLink({
 
   return (
     <>
-      <li className="p-2 md:hidden">
+      <li
+        className={clsx("px-6 py-2 rounded m-1 md:hidden", {
+          "bg-indigo-800": isActiveEndpoint(endpoint),
+        })}
+      >
         <Link href={`/dashboard/${endpoint}`}>
           <Icon />
         </Link>
       </li>
-      <li className="p-2 hidden md:block">
-        <Link href="">{title}</Link>
+      <li
+        className={clsx("px-6 py-2 rounded m-1 hidden md:block", {
+          "bg-indigo-800": isActiveEndpoint(endpoint),
+        })}
+      >
+        <Link href={`/dashboard/${endpoint}`}>{title}</Link>
       </li>
     </>
   )

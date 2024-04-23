@@ -27,7 +27,7 @@ export default function MediaModal({
   return (
     <div
       id="modal-container"
-      className="fixed top-0 left-0 z-[5] flex items-center justify-center bg-modal w-full h-full bg-black bg-opacity-80"
+      className="fixed top-0 left-0 z-[5] flex items-center justify-center bg-modal w-full h-full bg-black bg-opacity-90"
     >
       <IoIosClose
         onClick={toggleModal}
