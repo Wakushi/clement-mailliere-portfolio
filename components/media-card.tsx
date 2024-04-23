@@ -13,7 +13,7 @@ export default function MediaCard({
 }: {
   media: Media
   toggleModal: () => void
-  setSelectedMedia: (media: Media) => void
+  setSelectedMedia?: (media: Media) => void
   adminView?: boolean
 }) {
   const { id, imageUrl, title } = media
@@ -34,8 +34,10 @@ export default function MediaCard({
       })}
       key={imageUrl}
       onClick={() => {
-        setSelectedMedia(media)
-        toggleModal()
+        if (setSelectedMedia) {
+          setSelectedMedia(media)
+          toggleModal()
+        }
       }}
     >
       <Image

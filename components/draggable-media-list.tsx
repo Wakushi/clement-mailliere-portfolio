@@ -30,7 +30,6 @@ export default function DraggableMediaList({
   setUpdatedListOrder,
 }: DraggableMediaListProps) {
   const [showModal, setShowModal] = useState<boolean>(false)
-  const [selectedMediaUrl, setSelectedMediaUrl] = useState<string>("")
 
   function toggleModal(): void {
     setShowModal(!showModal)
@@ -77,7 +76,6 @@ export default function DraggableMediaList({
                 key={media.id}
                 media={media}
                 toggleModal={toggleModal}
-                setSelectedMediaUrl={setSelectedMediaUrl}
                 adminView={true}
               />
             ))}
