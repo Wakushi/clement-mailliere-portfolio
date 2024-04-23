@@ -1,14 +1,12 @@
-import type { Metadata } from "next"
+"use client"
 import "./globals.css"
 import { montserrat } from "@/styles/font"
 import { ReactNode } from "react"
 import Header from "@/components/header"
 import HeaderShell from "@/components/header-shell"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 
-export const metadata: Metadata = {
-  title: "Clement Mailliere - Portfolio",
-  description: "Animator, illustrator and UI designer portfolio",
-}
+const queryClient = new QueryClient()
 
 export default function RootLayout({
   children,
@@ -18,8 +16,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${montserrat.className} relative`}>
-        <HeaderShell headerContent={<Header />} />
-        {children}
+        <QueryClientProvider client={queryClient}>
+          <HeaderShell headerContent={<Header />} />
+          {children}
+        </QueryClientProvider>
       </body>
     </html>
   )

@@ -3,11 +3,14 @@ import { useState } from "react"
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog"
 import MediaForm from "./media-form"
 import { Button } from "./ui/button"
+import LoaderHive from "./ui/loader-hive/loader-hive"
 
 export default function AddMediaModal({
   type,
+  refreshList,
 }: {
   type: "drawing" | "animation" | "sketch"
+  refreshList: () => void
 }) {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const [isSuccess, setIsSuccess] = useState<boolean>(false)
@@ -15,16 +18,16 @@ export default function AddMediaModal({
   const DialogContentState = () => {
     if (isSubmitting) {
       return (
-        <div className="flex flex-col items-center justify-center w-full h-full">
-          <h1 className="text-2xl font-bold text-white">Uploading...</h1>
+        <div className="flex flex-col items-center justify-center w-full h-full min-h-[100vh]">
+          <LoaderHive />
         </div>
       )
     }
 
     if (isSuccess) {
       return (
-        <div className="flex flex-col items-center justify-center w-full h-full">
-          <h1 className="text-2xl font-bold text-white">Success!</h1>
+        <div className="flex flex-col items-center justify-center w-full h-full min-h-[100vh]">
+          <h1 className="text-2xl font-bold text-white">Media added !</h1>
         </div>
       )
     }
@@ -34,6 +37,7 @@ export default function AddMediaModal({
         type={type}
         setIsSubmitting={setIsSubmitting}
         setIsSuccess={setIsSuccess}
+        refreshList={refreshList}
       />
     )
   }

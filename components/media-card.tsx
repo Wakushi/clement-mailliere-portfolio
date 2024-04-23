@@ -8,12 +8,12 @@ import { CSS } from "@dnd-kit/utilities"
 export default function MediaCard({
   media,
   toggleModal,
-  setSelectedMediaUrl,
+  setSelectedMedia,
   adminView = false,
 }: {
   media: Media
   toggleModal: () => void
-  setSelectedMediaUrl: (mediaUrl: string) => void
+  setSelectedMedia: (media: Media) => void
   adminView?: boolean
 }) {
   const { id, imageUrl, title } = media
@@ -34,10 +34,8 @@ export default function MediaCard({
       })}
       key={imageUrl}
       onClick={() => {
-        if (!adminView) {
-          setSelectedMediaUrl(imageUrl)
-          toggleModal()
-        }
+        setSelectedMedia(media)
+        toggleModal()
       }}
     >
       <Image

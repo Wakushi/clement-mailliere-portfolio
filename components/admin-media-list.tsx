@@ -10,6 +10,7 @@ import { FaRegEdit } from "react-icons/fa"
 import clsx from "clsx"
 import MediaList from "./media-list"
 import { IoIosReorder } from "react-icons/io"
+import { useQueryClient } from "@tanstack/react-query"
 
 interface AdminMediaListProps {
   medias: Media[]
@@ -20,6 +21,7 @@ export default function AdminMediaList({
   medias,
   mediaType,
 }: AdminMediaListProps) {
+  const queryClient = useQueryClient()
   const [updatedListOrder, setUpdatedListOrder] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [items, setItems] = useState(medias)
@@ -32,15 +34,21 @@ export default function AdminMediaList({
       media.order = index
     })
     try {
-      await updateMediaListOrder(items)
+      const updatedMedias = await updateMediaListOrder(items)
+      setItems(updatedMedias)
       setUpdatedListOrder(false)
     } catch (error) {
       console.error(error)
     } finally {
-      const medias = await fetchMedias(mediaType)
-      setItems(medias)
+      queryClient.invalidateQueries({ queryKey: [mediaType] })
       setIsLoading(false)
     }
+  }
+
+  async function refreshList() {
+    queryClient.invalidateQueries({ queryKey: [mediaType] })
+    const medias = await fetchMedias(mediaType)
+    setItems(medias)
   }
 
   return (
@@ -48,7 +56,7 @@ export default function AdminMediaList({
       <div className="flex flex-col p-4 gap-2">
         <CustomSwitch mode={mode} setMode={setMode} />
         <div className="flex items-center gap-2 w-full ">
-          <AddMediaModal type={mediaType} />
+          <AddMediaModal type={mediaType} refreshList={refreshList} />
           {updatedListOrder && (
             <Button
               onClick={updateList}
@@ -66,7 +74,7 @@ export default function AdminMediaList({
           setUpdatedListOrder={setUpdatedListOrder}
         />
       ) : (
-        <MediaList medias={items} adminView={true} />
+        <MediaList medias={items} adminView={true} refreshList={refreshList} />
       )}
     </div>
   )

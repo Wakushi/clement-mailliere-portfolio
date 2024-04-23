@@ -1,14 +1,15 @@
 "use client"
+import { Media } from "@/lib/types"
 import Image from "next/image"
 import { useEffect } from "react"
 import { IoIosClose } from "react-icons/io"
 
 export default function MediaModal({
   toggleModal,
-  selectedMediaUrl,
+  selectedMedia,
 }: {
   toggleModal: () => void
-  selectedMediaUrl: string
+  selectedMedia: Media
 }) {
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
@@ -35,7 +36,7 @@ export default function MediaModal({
       <div className="opacity-0 fade-in-bottom overflow-auto w-full h-full md:max-w-[90vw] lg:max-w-[80vw]">
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[max-content]">
           <Image
-            src={selectedMediaUrl}
+            src={selectedMedia.imageUrl}
             alt="media"
             width={0}
             height={0}

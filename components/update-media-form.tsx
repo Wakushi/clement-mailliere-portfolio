@@ -1,4 +1,3 @@
-"use client"
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -12,72 +11,62 @@ import {
 } from "@/components/ui/form"
 import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
+import { updateMedia } from "@/lib/data"
+import { Media } from "@/lib/types"
 import { Button } from "./ui/button"
-import { createMedia, generateImage } from "@/lib/data"
 
 const formSchema = z.object({
   title: z.string(),
   description: z.string().optional(),
 })
 
-interface MediaFormProps {
-  type: "drawing" | "animation" | "sketch"
+interface UpdateMediaFormProps {
+  media: Media
   setIsSubmitting: (value: boolean) => void
   setIsSuccess: (value: boolean) => void
-  refreshList: () => void
+  setSuccessMessage: (value: string) => void
+  refreshList?: () => void
 }
 
-export default function MediaForm({
-  type,
+export default function MediaUpdateForm({
+  media,
   setIsSuccess,
   setIsSubmitting,
+  setSuccessMessage,
   refreshList,
-}: MediaFormProps) {
+}: UpdateMediaFormProps) {
   const mediaForm = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      description: "",
+      title: media.title,
+      description: media.description,
     },
   })
-
-  let selectedImage: File[] = []
-
-  function onSelectImage(event: any) {
-    const file = event.target.files[0]
-    if (file) {
-      selectedImage = [file]
-    }
-  }
 
   async function onSubmit(formValues: z.infer<typeof formSchema>) {
     setIsSubmitting(true)
     try {
-      const formData = new FormData()
-      formData.append("image", selectedImage[0])
-      const imageUrl = await generateImage(selectedImage[0])
-      const response = await createMedia({
+      const response = await updateMedia({
+        ...media,
         title: formValues.title ?? "",
         description: formValues.description ?? "",
-        type,
-        imageUrl,
       })
       if (response) {
         setIsSuccess(true)
-        refreshList()
+        setSuccessMessage("Media updated successfully")
       }
     } catch (error) {
       console.error(error)
     } finally {
       setIsSubmitting(false)
+      if (refreshList) refreshList()
     }
   }
-
   return (
     <Form {...mediaForm}>
       <form
         onSubmit={mediaForm.handleSubmit(onSubmit)}
-        className="flex flex-col gap-2 p-4 w-full"
+        className="flex flex-col gap-2 w-full"
       >
         <FormField
           control={mediaForm.control}
@@ -122,13 +111,11 @@ export default function MediaForm({
             </FormItem>
           )}
         />
-        <label htmlFor="image">Image (10Mb max)</label>
-        <input id="image" type="file" onChange={(e) => onSelectImage(e)} />
         <Button
           type="submit"
-          className="bg-indigo-800 w-full hover:text-indigo-800 hover:bg-white px-4 py-2 rounded font-bold text-md mt-4"
+          className="bg-indigo-800 w-full hover:text-indigo-800 hover:bg-white px-4 py-2 rounded font-bold text-md"
         >
-          Create
+          Update
         </Button>
       </form>
     </Form>

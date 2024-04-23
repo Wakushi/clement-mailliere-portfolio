@@ -2,6 +2,7 @@ import { db } from "../firebase"
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   getDocs,
   query,
@@ -12,6 +13,7 @@ import {
 import { Media } from "./types"
 
 export async function fetchMedias(type?: Media["type"]) {
+  "no-store"
   const medias: Media[] = []
   const mediasRef = collection(db, "medias")
   const q = type ? query(mediasRef, where("type", "==", type)) : mediasRef
@@ -52,19 +54,24 @@ export async function createMedia({
   }
 }
 
-export async function updateMedia(media: Media) {
-  await setDoc(doc(db, "medias", media.id), {
-    title: media.title,
-    description: media.description,
-    imageUrl: media.imageUrl,
-    type: media.type,
-    order: media.order,
-  })
+export async function updateMedia(media: Media): Promise<boolean> {
+  try {
+    await setDoc(doc(db, "medias", media.id), {
+      title: media.title,
+      description: media.description,
+      imageUrl: media.imageUrl,
+      type: media.type,
+      order: media.order,
+    })
+    return true
+  } catch (error) {
+    console.error(error)
+    return false
+  }
 }
 
-export async function updateMediaListOrder(medias: Media[]) {
+export async function updateMediaListOrder(medias: Media[]): Promise<Media[]> {
   const batch = writeBatch(db)
-
   medias.forEach((media) => {
     const mediaRef = doc(db, "medias", media.id)
     batch.update(mediaRef, { order: media.order })
@@ -72,9 +79,21 @@ export async function updateMediaListOrder(medias: Media[]) {
 
   try {
     await batch.commit()
-    console.log("Batched update successful")
+    const updatedMedias = await fetchMedias(medias[0].type)
+    return updatedMedias
   } catch (error) {
     console.error("Failed to update media order:", error)
+    return []
+  }
+}
+
+export async function deleteMedia(media: Media): Promise<boolean> {
+  try {
+    await deleteDoc(doc(db, "medias", media.id))
+    return true
+  } catch (error) {
+    console.error(error)
+    return false
   }
 }
 
