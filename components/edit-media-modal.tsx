@@ -62,6 +62,7 @@ export default function MediaEditModal({
             <video
               controls
               autoPlay
+              muted
               src={selectedMedia.imageUrl}
               width={0}
               height={0}

@@ -42,12 +42,14 @@ export async function createMedia({
   imageUrl,
   type,
   isVideo = false,
+  fileName = "",
 }: {
   title: string
   description: string
   imageUrl: string
   type: Media["type"]
   isVideo?: boolean
+  fileName?: string
 }): Promise<boolean> {
   try {
     const targetCollection = await fetchMedias(type)
@@ -58,6 +60,7 @@ export async function createMedia({
       type: type,
       order: targetCollection.length,
       isVideo: isVideo,
+      fileName: fileName,
     })
     return true
   } catch (error) {
@@ -102,6 +105,9 @@ export async function updateMediaListOrder(medias: Media[]): Promise<Media[]> {
 export async function deleteMedia(media: Media): Promise<boolean> {
   try {
     await deleteDoc(doc(db, "medias", media.id))
+    if (media.isVideo && media.fileName) {
+      await deleteVideoFile(media.fileName)
+    }
     return true
   } catch (error) {
     console.error(error)
@@ -166,6 +172,7 @@ export async function uploadVideo(
                   imageUrl: downloadURL,
                   type: type || "drawing",
                   isVideo: true,
+                  fileName: file.name,
                 })
                 resolve()
               }
@@ -175,6 +182,22 @@ export async function uploadVideo(
       )
     }
   })
+}
+
+export async function deleteVideoFile(fileName: string): Promise<boolean> {
+  const videoRef = ref(storage, `mediaVideos/${fileName}`)
+  const videoUrlRef = collection(db, "mediaVideos")
+  try {
+    await deleteObject(videoRef)
+    const querySnapshot = await getDocs(videoUrlRef)
+    querySnapshot.forEach((doc) => {
+      deleteDoc(doc.ref)
+    })
+    return true
+  } catch (error) {
+    console.error("Error deleting file:", error)
+    return false
+  }
 }
 
 export async function deleteDemoVideo(path: string): Promise<boolean> {

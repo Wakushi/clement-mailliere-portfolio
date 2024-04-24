@@ -6,4 +6,5 @@ export type Media = {
   type: "drawing" | "animation" | "sketch"
   order: number
   isVideo?: boolean
+  fileName?: string
 }

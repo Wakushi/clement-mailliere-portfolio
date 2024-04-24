@@ -42,6 +42,7 @@ export default function MediaCard({
       {isVideo ? (
         <video
           autoPlay
+          muted
           src={imageUrl}
           width={0}
           height={0}
