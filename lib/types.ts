@@ -5,4 +5,5 @@ export type Media = {
   imageUrl: string
   type: "drawing" | "animation" | "sketch"
   order: number
+  isVideo?: boolean
 }

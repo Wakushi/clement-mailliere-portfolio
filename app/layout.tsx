@@ -6,6 +6,7 @@ import Header from "@/components/header"
 import HeaderShell from "@/components/header-shell"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import Head from "next/head"
+import { Toaster } from "@/components/ui/toaster"
 
 const queryClient = new QueryClient()
 
@@ -34,6 +35,7 @@ export default function RootLayout({
         <QueryClientProvider client={queryClient}>
           <HeaderShell headerContent={<Header />} />
           {children}
+          <Toaster />
         </QueryClientProvider>
       </body>
     </html>

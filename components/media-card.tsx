@@ -1,7 +1,6 @@
 import { Media } from "@/lib/types"
 import clsx from "clsx"
 import Image from "next/image"
-
 import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 
@@ -16,7 +15,7 @@ export default function MediaCard({
   setSelectedMedia?: (media: Media) => void
   adminView?: boolean
 }) {
-  const { id, imageUrl, title } = media
+  const { id, imageUrl, title, isVideo } = media
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id })
   const style = { transform: CSS.Transform.toString(transform), transition }
@@ -40,14 +39,24 @@ export default function MediaCard({
         }
       }}
     >
-      <Image
-        src={imageUrl}
-        alt={title}
-        width={0}
-        height={0}
-        style={{ width: "100%", height: "100%" }}
-        sizes="100vw"
-      />
+      {isVideo ? (
+        <video
+          autoPlay
+          src={imageUrl}
+          width={0}
+          height={0}
+          style={{ width: "100%", height: "100%" }}
+        ></video>
+      ) : (
+        <Image
+          src={imageUrl}
+          alt={title}
+          width={0}
+          height={0}
+          style={{ width: "100%", height: "100%" }}
+          sizes="100vw"
+        />
+      )}
     </div>
   )
 }

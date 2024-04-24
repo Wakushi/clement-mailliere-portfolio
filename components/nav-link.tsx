@@ -21,6 +21,14 @@ export default function NavLink({
   const [showDemo, setShowDemo] = useState<boolean>(false)
 
   function triggerFullWidthDemo(e: any) {
+    if (demo && !showDemo) {
+      setTimeout(() => {
+        const videoElement = document.querySelector(
+          "#demoVideo"
+        ) as HTMLVideoElement
+        videoElement.play()
+      }, 200)
+    }
     if (demo && e.target.id !== "demoVideo") {
       setShowDemo((prevShow) => !prevShow)
     }
@@ -31,7 +39,7 @@ export default function NavLink({
       id={demo ? "demoLink" : ""}
       onClick={(e) => triggerFullWidthDemo(e)}
       className={clsx(
-        "nav-link custom-box-shadow relative h-[100px] w-[400px] md:h-[700px] md:w-[100px] lg:h-[800px] lg:w-[100px] opacity-0 transition-all duration-500 ease-in-out overflow-hidden filter grayscale hover:h-[300px] hover:opacity-100 hover:grayscale-0  md:hover:h-[700px] md:hover:w-[500px] lg:hover:h-[800px] md:hover:w-[700px]",
+        "nav-link bg-black custom-box-shadow relative h-[100px] w-[400px] md:h-[700px] md:w-[100px] lg:h-[800px] lg:w-[100px] opacity-0 transition-all duration-500 ease-in-out overflow-hidden filter grayscale hover:h-[300px] hover:opacity-100 hover:grayscale-0  md:hover:h-[700px] md:hover:w-[500px] lg:hover:h-[800px] md:hover:w-[700px]",
         {
           "full-width-demo": showDemo,
           "fade-in-bottom-1": !showDemo,
@@ -50,7 +58,12 @@ export default function NavLink({
         </div>
       )}
       {showDemo && (
-        <video id="demoVideo" controls={true} src={src} className=""></video>
+        <video
+          id="demoVideo"
+          controls={true}
+          src={src}
+          className="bg-black object-contain md:max-w-[90vw] mx-auto"
+        ></video>
       )}
       {!showDemo && (
         <Image

@@ -13,7 +13,7 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
 import { Button } from "./ui/button"
-import { createMedia, generateImage } from "@/lib/data"
+import { createMedia, generateImage, uploadVideo } from "@/lib/data"
 
 const formSchema = z.object({
   title: z.string(),
@@ -41,28 +41,34 @@ export default function MediaForm({
     },
   })
 
-  let selectedImage: File[] = []
+  let selectedFile: File[] = []
 
-  function onSelectImage(event: any) {
+  function onSelectMedia(event: any) {
     const file = event.target.files[0]
     if (file) {
-      selectedImage = [file]
+      selectedFile = [file]
     }
   }
 
   async function onSubmit(formValues: z.infer<typeof formSchema>) {
     setIsSubmitting(true)
     try {
-      const formData = new FormData()
-      formData.append("image", selectedImage[0])
-      const imageUrl = await generateImage(selectedImage[0])
-      const response = await createMedia({
-        title: formValues.title ?? "",
-        description: formValues.description ?? "",
-        type,
-        imageUrl,
-      })
-      if (response) {
+      if (selectedFile[0].type.split("/")[0] !== "video") {
+        const formData = new FormData()
+        formData.append("image", selectedFile[0])
+        const imageUrl = await generateImage(selectedFile[0])
+        const response = await createMedia({
+          title: formValues.title ?? "",
+          description: formValues.description ?? "",
+          type,
+          imageUrl,
+        })
+        if (response) {
+          setIsSuccess(true)
+          refreshList()
+        }
+      } else {
+        await uploadVideo(selectedFile[0], false, type)
         setIsSuccess(true)
         refreshList()
       }
@@ -122,8 +128,8 @@ export default function MediaForm({
             </FormItem>
           )}
         />
-        <label htmlFor="image">Image (10Mb max)</label>
-        <input id="image" type="file" onChange={(e) => onSelectImage(e)} />
+        <label htmlFor="image">Media (10Mb max for images)</label>
+        <input id="image" type="file" onChange={(e) => onSelectMedia(e)} />
         <Button
           type="submit"
           className="bg-indigo-800 w-full hover:text-indigo-800 hover:bg-white px-4 py-2 rounded font-bold text-md mt-4"

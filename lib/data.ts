@@ -11,7 +11,15 @@ import {
   writeBatch,
 } from "firebase/firestore"
 import { Media } from "./types"
-import { deleteObject, getStorage, ref } from "firebase/storage"
+import {
+  deleteObject,
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage"
+
+const storage = getStorage()
 
 export async function fetchMedias(type?: Media["type"]) {
   "no-store"
@@ -33,11 +41,13 @@ export async function createMedia({
   description,
   imageUrl,
   type,
+  isVideo = false,
 }: {
   title: string
   description: string
   imageUrl: string
   type: Media["type"]
+  isVideo?: boolean
 }): Promise<boolean> {
   try {
     const targetCollection = await fetchMedias(type)
@@ -47,6 +57,7 @@ export async function createMedia({
       imageUrl: imageUrl,
       type: type,
       order: targetCollection.length,
+      isVideo: isVideo,
     })
     return true
   } catch (error) {
@@ -116,11 +127,65 @@ export async function generateImage(imageFile: File): Promise<string> {
   return data.data.link
 }
 
-export async function deleteVideo(path: string): Promise<boolean> {
-  const storage = getStorage()
+export async function uploadVideo(
+  file: File,
+  demo?: boolean,
+  type?: Media["type"]
+): Promise<void> {
+  return new Promise(async (resolve, reject) => {
+    if (file) {
+      if (demo) {
+        await deleteDemoVideo("videos/demo.mp4")
+      }
+      const storageRef = ref(
+        storage,
+        demo ? "videos/demo.mp4" : `mediaVideos/${file.name}`
+      )
+      const uploadTask = uploadBytesResumable(storageRef, file)
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          console.log("Upload is " + progress + "% done")
+        },
+        (error) => {
+          console.error(error)
+          reject(error)
+        },
+        async () => {
+          await getDownloadURL(uploadTask.snapshot.ref).then(
+            async (downloadURL) => {
+              if (demo) {
+                await setDemoVideoUrl({ url: downloadURL })
+                resolve()
+              } else {
+                await createMedia({
+                  title: file.name,
+                  description: "",
+                  imageUrl: downloadURL,
+                  type: type || "drawing",
+                  isVideo: true,
+                })
+                resolve()
+              }
+            }
+          )
+        }
+      )
+    }
+  })
+}
+
+export async function deleteDemoVideo(path: string): Promise<boolean> {
   const videoRef = ref(storage, path)
+  const videoUrlRef = collection(db, "videoUrl")
   try {
     await deleteObject(videoRef)
+    const querySnapshot = await getDocs(videoUrlRef)
+    querySnapshot.forEach((doc) => {
+      deleteDoc(doc.ref)
+    })
     return true
   } catch (error) {
     console.error("Error deleting file:", error)
@@ -128,7 +193,11 @@ export async function deleteVideo(path: string): Promise<boolean> {
   }
 }
 
-export async function setVideoUrl({ url }: { url: string }): Promise<boolean> {
+export async function setDemoVideoUrl({
+  url,
+}: {
+  url: string
+}): Promise<boolean> {
   try {
     await addDoc(collection(db, "videoUrl"), {
       url: url,
