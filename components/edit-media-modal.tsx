@@ -63,6 +63,7 @@ export default function MediaEditModal({
               controls
               autoPlay
               muted
+              loop
               src={selectedMedia.imageUrl}
               width={0}
               height={0}

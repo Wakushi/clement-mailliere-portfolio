@@ -45,7 +45,7 @@ export default function MediaModal({
             <video
               controls
               autoPlay
-              muted
+              loop
               src={selectedMedia.imageUrl}
               width={0}
               height={0}
