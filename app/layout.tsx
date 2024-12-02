@@ -1,14 +1,11 @@
-"use client"
 import "./globals.css"
 import { montserrat } from "@/styles/font"
 import { ReactNode } from "react"
 import Header from "@/components/header"
 import HeaderShell from "@/components/header-shell"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import Head from "next/head"
 import { Toaster } from "@/components/ui/toaster"
-
-const queryClient = new QueryClient()
+import Providers from "@/providers"
 
 export default function RootLayout({
   children,
@@ -32,11 +29,11 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <body className={`${montserrat.className} relative`}>
-        <QueryClientProvider client={queryClient}>
+        <Providers>
           <HeaderShell headerContent={<Header />} />
           {children}
           <Toaster />
-        </QueryClientProvider>
+        </Providers>
       </body>
     </html>
   )
