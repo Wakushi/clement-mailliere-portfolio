@@ -17,7 +17,7 @@ export default function MediaCard({
   setSelectedMedia?: (media: Media) => void
   adminView?: boolean
 }) {
-  const { id, imageUrl, title, isVideo } = media
+  const { id, imageUrl, title, isVideo, thumbnailUrl } = media
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id })
   const style = { transform: CSS.Transform.toString(transform), transition }
@@ -75,22 +75,12 @@ export default function MediaCard({
     >
       {isVideo ? (
         <>
-          {!isInView ? (
-            <div></div>
-          ) : (
-            // <Image
-            //   src={getThumbnailUrl(imageUrl)}
-            //   alt={title}
-            //   width={0}
-            //   height={0}
-            //   style={{ width: "100%", height: "100%" }}
-            //   sizes="100vw"
-            // />
+          {isInView && (
             <video
               ref={videoRef}
               loop
               muted
-              src={imageUrl}
+              src={thumbnailUrl || imageUrl}
               width={0}
               height={0}
               style={{ width: "100%", height: "100%" }}
