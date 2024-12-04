@@ -75,7 +75,7 @@ export default function MediaCard({
     >
       {isVideo ? (
         <>
-          {isInView && (
+          {isInView ? (
             <video
               ref={videoRef}
               loop
@@ -91,6 +91,8 @@ export default function MediaCard({
                 isLoaded ? "opacity-100" : "opacity-0"
               )}
             />
+          ) : (
+            <div className="h-full w-full bg-black"></div>
           )}
         </>
       ) : (
