@@ -7,4 +7,5 @@ export type Media = {
   order: number
   isVideo?: boolean
   fileName?: string
+  thumbnailUrl?: string
 }
