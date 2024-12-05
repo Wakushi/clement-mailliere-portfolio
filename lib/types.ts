@@ -9,3 +9,8 @@ export type Media = {
   fileName?: string
   thumbnailUrl?: string
 }
+
+export type Demo = {
+  id: string
+  url: string
+}

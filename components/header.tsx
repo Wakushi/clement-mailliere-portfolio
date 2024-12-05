@@ -40,6 +40,7 @@ export default function Header() {
           <ModalNavLink href="/drawings" title="Drawings" />
           <ModalNavLink href="/animations" title="Animations" />
           <ModalNavLink href="/sketches" title="Sketches" />
+          <ModalNavLink href="/demo" title="Demo" />
         </ul>
       </nav>
       <nav className="hidden lg:flex items-center justify-center gap-4">
@@ -86,6 +87,11 @@ function NavModal({
             <ModalNavLink
               href="/sketches"
               title="Sketches"
+              hamburgerMenuToggle={hamburgerMenuToggle}
+            />
+            <ModalNavLink
+              href="/demo"
+              title="Demo"
               hamburgerMenuToggle={hamburgerMenuToggle}
             />
           </ul>

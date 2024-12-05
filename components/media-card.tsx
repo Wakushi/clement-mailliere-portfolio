@@ -65,7 +65,7 @@ export default function MediaCard({
   if (isVideo && !displayUrl()) {
     return (
       <div
-        ref={setNodeRef}
+        ref={combinedRef}
         {...attributes}
         {...listeners}
         style={style}

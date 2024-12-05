@@ -15,8 +15,8 @@ export default function MediaList({
   adminView?: boolean
 }) {
   const [showModal, setShowModal] = useState<boolean>(false)
-  const [showEditModal, setShowEditModal] = useState<boolean>(false)
   const [selectedMedia, setSelectedMedia] = useState<Media>(medias[0])
+  const [showEditModal, setShowEditModal] = useState<boolean>(false)
 
   function toggleModal(): void {
     if (adminView) {

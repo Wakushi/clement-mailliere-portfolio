@@ -4,13 +4,14 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
   query,
   setDoc,
   where,
   writeBatch,
 } from "firebase/firestore"
-import { Media } from "./types"
+import { Demo, Media } from "./types"
 import {
   deleteObject,
   getDownloadURL,
@@ -140,12 +141,9 @@ export async function uploadVideo(
 ): Promise<void> {
   return new Promise(async (resolve, reject) => {
     if (file) {
-      if (demo) {
-        await deleteDemoVideo("videos/demo.mp4")
-      }
       const storageRef = ref(
         storage,
-        demo ? "videos/demo.mp4" : `mediaVideos/${file.name}`
+        demo ? `videos/demo-${Date.now()}.mp4` : `mediaVideos/${file.name}`
       )
       const uploadTask = uploadBytesResumable(storageRef, file)
       uploadTask.on(
@@ -183,7 +181,6 @@ export async function uploadVideo(
     }
   })
 }
-
 export async function deleteVideoFile(fileName: string): Promise<boolean> {
   const videoRef = ref(storage, `mediaVideos/${fileName}`)
   const videoUrlRef = collection(db, "mediaVideos")
@@ -200,16 +197,23 @@ export async function deleteVideoFile(fileName: string): Promise<boolean> {
   }
 }
 
-export async function deleteDemoVideo(path: string): Promise<boolean> {
-  const videoRef = ref(storage, path)
-  const videoUrlRef = collection(db, "videoUrl")
+export async function deleteDemoVideo(docId: string): Promise<boolean> {
   try {
-    await deleteObject(videoRef)
-    const querySnapshot = await getDocs(videoUrlRef)
-    querySnapshot.forEach((doc) => {
-      deleteDoc(doc.ref)
-    })
-    return true
+    const videoUrlRef = collection(db, "videoUrl")
+    const docRef = doc(videoUrlRef, docId)
+    const docSnap = await getDoc(docRef)
+
+    if (docSnap.exists()) {
+      const data = docSnap.data()
+      const url = data.url
+      const path = decodeURIComponent(url.split("/o/")[1].split("?")[0])
+      const videoRef = ref(storage, path)
+
+      await deleteObject(videoRef)
+      await deleteDoc(docRef)
+      return true
+    }
+    return false
   } catch (error) {
     console.error("Error deleting file:", error)
     return false
@@ -232,12 +236,18 @@ export async function setDemoVideoUrl({
   }
 }
 
-export async function getVideoUrl() {
+export async function getDemos() {
+  const videos: Demo[] = []
+
   const videoUrlRef = collection(db, "videoUrl")
   const querySnapshot = await getDocs(videoUrlRef)
-  let url = ""
+
   querySnapshot.forEach((doc) => {
-    url = doc.data().url
+    videos.push({
+      id: doc.id,
+      ...doc.data(),
+    } as Demo)
   })
-  return url
+
+  return videos
 }

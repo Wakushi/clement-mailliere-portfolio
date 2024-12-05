@@ -1,14 +1,8 @@
 "use client"
 import Footer from "@/components/footer"
 import NavLink from "@/components/nav-link"
-import { getVideoUrl } from "@/lib/data"
-import { useQuery } from "@tanstack/react-query"
 
 export default function LandingPage() {
-  const { data: videoUrl, isLoading } = useQuery<string, Error>({
-    queryKey: ["videoUrl"],
-    queryFn: () => getVideoUrl(),
-  })
   return (
     <div className="flex flex-col justify-center items-center relative h-[100dvh] overflow-hidden">
       <section className="hero">
@@ -33,12 +27,7 @@ export default function LandingPage() {
               title="Sketches"
             />
             {/* DEMO LINK */}
-            <NavLink
-              href="/demo"
-              src={videoUrl ?? ""}
-              title="Demo"
-              demo={true}
-            />
+            <NavLink href="/demo" src="/images/demo.gif" title="Demo" />
           </ul>
         </nav>
       </section>
