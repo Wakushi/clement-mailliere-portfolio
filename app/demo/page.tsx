@@ -31,7 +31,7 @@ export default function DemosPage() {
 
   return (
     <>
-      <div className="p-2 flex items-center justify-center pt-[8rem]">
+      <div className="p-2 flex flex-wrap items-center justify-center pt-[8rem]">
         {demos.map((demo) => (
           <DemoCard
             key={demo.id}
@@ -58,24 +58,29 @@ function DemoCard({
   toggleModal: () => void
 }) {
   return (
-    <div
-      className="w-full relative max-w-[400px] md:max-w-[800px]"
-      onClick={() => {
-        if (setSelectedDemo) {
-          setSelectedDemo(demo)
-          toggleModal()
-        }
-      }}
-    >
-      <video
-        loop
-        muted
-        src={demo.url}
-        width={0}
-        height={0}
-        autoPlay
-        style={{ width: "100%", height: "100%" }}
-      />
+    <div>
+      <div
+        className="w-full relative max-w-[400px] md:max-w-[800px]"
+        onClick={() => {
+          if (setSelectedDemo) {
+            setSelectedDemo(demo)
+            toggleModal()
+          }
+        }}
+      >
+        <video
+          loop
+          muted
+          src={demo.url}
+          width={0}
+          height={0}
+          autoPlay
+          style={{ width: "100%", height: "100%" }}
+        />
+      </div>
+      <p className="p-2 font-semibold md:text-lg lg:text-xl text-end">
+        {demo.title}
+      </p>
     </div>
   )
 }

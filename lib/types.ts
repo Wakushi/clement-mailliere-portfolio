@@ -13,4 +13,5 @@ export type Media = {
 export type Demo = {
   id: string
   url: string
+  title: string
 }
