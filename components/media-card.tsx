@@ -21,6 +21,7 @@ export default function MediaCard({
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id })
   const style = { transform: CSS.Transform.toString(transform), transition }
+
   const videoRef = useRef<HTMLVideoElement>(null)
   const [isInView, setIsInView] = useState(false)
   const [isLoaded, setIsLoaded] = useState(false)
@@ -55,9 +56,53 @@ export default function MediaCard({
     }
   }, [isInView])
 
+  const displayUrl = (): string => {
+    if (!isVideo) return imageUrl
+
+    return thumbnailUrl || ""
+  }
+
+  if (isVideo && !displayUrl()) {
+    return (
+      <div
+        ref={setNodeRef}
+        {...attributes}
+        {...listeners}
+        style={style}
+        className={clsx("w-full relative", {
+          "w-[100px] h-[100px] max-w-[100px] max-h-[100px] md:w-[200px] md:h-[200px] md:max-w-[200px] md:max-h-[200px] lg:w-[300px] lg:h-[300px] lg:max-w-[300px] lg:max-h-[300px] touch-none":
+            adminView,
+          "max-w-[400px] md:max-w-[800px]": !adminView,
+        })}
+        onClick={() => {
+          if (setSelectedMedia) {
+            setSelectedMedia(media)
+            toggleModal()
+          }
+        }}
+      >
+        <video
+          ref={videoRef}
+          loop
+          muted
+          src={imageUrl}
+          width={0}
+          height={0}
+          style={{ width: "100%", height: "100%" }}
+          preload="metadata"
+          onLoadedData={() => setIsLoaded(true)}
+          className={clsx(
+            "transition-opacity duration-300",
+            isLoaded ? "opacity-100" : "opacity-0"
+          )}
+        />
+      </div>
+    )
+  }
+
   return (
     <div
-      ref={combinedRef}
+      ref={setNodeRef}
       {...attributes}
       {...listeners}
       style={style}
@@ -73,38 +118,14 @@ export default function MediaCard({
         }
       }}
     >
-      {isVideo ? (
-        <>
-          {isInView ? (
-            <video
-              ref={videoRef}
-              loop
-              muted
-              src={thumbnailUrl || imageUrl}
-              width={0}
-              height={0}
-              style={{ width: "100%", height: "100%" }}
-              preload="metadata"
-              onLoadedData={() => setIsLoaded(true)}
-              className={clsx(
-                "transition-opacity duration-300",
-                isLoaded ? "opacity-100" : "opacity-0"
-              )}
-            />
-          ) : (
-            <div className="h-full w-full bg-black"></div>
-          )}
-        </>
-      ) : (
-        <Image
-          src={imageUrl}
-          alt={title}
-          width={0}
-          height={0}
-          style={{ width: "100%", height: "100%" }}
-          sizes="100vw"
-        />
-      )}
+      <Image
+        src={displayUrl()}
+        alt={title}
+        width={0}
+        height={0}
+        style={{ width: "100%", height: "100%" }}
+        sizes="100vw"
+      />
     </div>
   )
 }
